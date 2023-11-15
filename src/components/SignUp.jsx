@@ -1,16 +1,35 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithRedirect } from "firebase/auth";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from '../config/firebase';
 
-const SignUp = ({ email, password, handlePassword, fac, handleFac, handleEmail }) => {
+const SignUp = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('')
+    const [fac, setFac] = useState('')
 
-    const navigate = useNavigate()
+    const handleFac = (e) => {
+        setFac(e.target.value)
+    }
+
+
+    const handlePassword = (e) => {
+        setPassword(e.target.value)
+        console.log(password)
+    }
+
+
+    const handleEmail = (e) => {
+        setEmail(e.target.value)
+        console.log(email);
+    }
+
+    const navigate = useNavigate();
     const provider = new GoogleAuthProvider();
 
-    const createUser = async (e) => {
+    const createUser = (e) => {
         e.preventDefault(),
-            await createUserWithEmailAndPassword(auth, email, password)
+            createUserWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     // Signed up 
                     const user = userCredential.user;
@@ -25,13 +44,28 @@ const SignUp = ({ email, password, handlePassword, fac, handleFac, handleEmail }
                 });
     }
 
-    const handleGoogleSignUp = () => {
-        try {
-            signInWithRedirect(auth, provider);
-            navigate('/profile')
-        } catch (err) {
-            console.error(err)
-        }
+    const handleGoogleSignUp = (e) => {
+        e.preventDefault()
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                // IdP data available using getAdditionalUserInfo(result)
+                // ...
+                navigate('/profile')
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                // ...
+            });
     }
 
     return (
@@ -66,7 +100,7 @@ const SignUp = ({ email, password, handlePassword, fac, handleFac, handleEmail }
                         Or
                     </p>
 
-                    <button className='bg-white py-3 px-4 rounded-xl md:rounded-2xl border text-orange-400 font-semibold text-lg hover:bg-transparent hover:text-white hover:rounded-none transition-all linear duration-200 ml-3 mb-2' onClick={handleGoogleSignUp}>Use Google</button>
+                    <button className='bg-white py-3 px-4 rounded-xl md:rounded-2xl border text-orange-400 font-semibold text-lg hover:bg-transparent hover:text-white hover:rounded-none transition-all linear duration-200 ml-3 mb-2' onClick={(e) => { handleGoogleSignUp(e) }}>Use Google</button>
 
                     <p className='text-lg font-semibold'>Already own a portal? <Link to='/login' className='font-bold underline'>Log In</Link></p>
                 </div>

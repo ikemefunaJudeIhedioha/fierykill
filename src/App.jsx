@@ -7,26 +7,8 @@ import { useState } from "react";
 
 
 function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('')
-  const [fac, setFac] = useState('')
 
 
-  const handleFac = (e) => {
-    setFac(e.target.value)
-  }
-
-
-  const handlePassword = (e) => {
-    setPassword(e.target.value)
-    console.log(password)
-  }
-
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value)
-    console.log(email);
-  }
 
   const router = createBrowserRouter([
     {
@@ -35,7 +17,7 @@ function App() {
     },
     {
       path: 'signup',
-      element: <SignUp email={email} handleEmail={handleEmail} handleFac={handleFac} handlePassword={handlePassword} />
+      element: <SignUp />
     },
     {
       path: '/login',
@@ -43,7 +25,7 @@ function App() {
     },
     {
       path: '/profile',
-      element: <Profile email={email} fac={fac} />
+      element: <Profile />
     }
   ])
 
