@@ -36,7 +36,7 @@ const Login = ({ email, password, handlePassword, handleEmail }) => {
 
 
     return (
-        <div className='h-screen w-full bg-orange-400 items-center flex flex-col justify-center gap-20 text-white px-8'>
+        <div className='h-screen w-full bg-orange-400 items-center md:gap-6 flex flex-col justify-center gap-20 text-white px-8'>
             <h1 className='text-4xl font-bold md:text-4xl lg:text-7xl text-center -mt-40 mb-40'>Burham University</h1>
 
             <form className='w-full md:px-8 px-4 md:py-10 py-4 flex flex-col items-center gap-8 border rounded-xl md:rounded-2xl md:w-[30%]' onSubmit={handleLogin}>
